@@ -15,11 +15,21 @@ fun createDialogPanel(): DialogPanel {
     return panel {
         row {
             cell {
-                checkBox("", SettingsUIData.instance.myState::myFlag)
-                label("Convert all URLs to short links when Markdown files are saved")
+                textField("", SettingsUIData.instance.myState::username)
+                label("ELK login user name")
+            }
+            cell {
+                textField("", SettingsUIData.instance.myState::password)
+                label("ELK login password")
             }
         }
-        noteRow("""This plugin is <a href="https://github.com/r3bl-org/shorty-idea-plugin">open source️</a> 💙️""") {
+        row {
+            cell {
+                textField("", SettingsUIData.instance.myState::elkUrl)
+                label("ELK URL")
+            }
+        }
+        noteRow("""This plugin is <a href="https://github.com/Yozez/ELKAutoComplete">open source</a> 💙️""") {
             BrowserUtil.browse(it)
         }
     }
@@ -46,10 +56,12 @@ class SettingsUIData : PersistentStateComponent<SettingsUIData.State> {
 
     // Properties in this class are bound to the Kotlin DSL UI.
     class State {
-        var myFlag: Boolean by object : LoggingProperty<State, Boolean>(false) {}
+        var username: String by object : LoggingProperty<State, String>("") {}
+        var password: String by object : LoggingProperty<State, String>("") {}
+        var elkUrl: String by object : LoggingProperty<State, String>("") {}
 
         override fun toString(): String =
-                "State{ myFlag: '$myFlag' }"
+                "State{ username: '$username', password: '$password', elkUrl: '$elkUrl' }"
 
         /** Factory class to generate synthetic properties, that log every access and mutation to each property. */
         open class LoggingProperty<R, T>(initValue: T) : ReadWriteProperty<R, T> {
